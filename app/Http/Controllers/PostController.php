@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\Tag;
+use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -65,10 +66,34 @@ class PostController extends Controller
         $tag_ids = $this->syncTags($tags);
         $post->tags()->sync($tag_ids);
 
+        $types = $request->get('types');
+        $type_ids = $this->syncTypes($types);
+        $post->types()->sync($type_ids);
+
         return redirect()->route('posts.show', [ 'post' => $post->id ]);
         //                     --------------------------^
         //                    |
         // GET|HEAD  posts/{post} ........ posts.show › PostController@show
+    }
+
+    private function syncTypes($types)
+    {
+        $types = explode(",", $types);
+        $types = array_map(function ($v) {
+            return Str::ucfirst(trim($v));
+        }, $types);
+
+        $type_ids = [];
+        foreach ($types as $type_name) {
+            $type = Type::where('name', $type_name)->first();
+            if (!$type) {
+                $type = new Type();
+                $type->name = $type_name;
+                $type->save();
+            }
+            $type_ids[] = $type->id;
+        }
+        return $type_ids;
     }
 
     private function syncTags($tags)
@@ -144,6 +169,10 @@ class PostController extends Controller
         $tags = $request->get('tags');
         $tag_ids = $this->syncTags($tags);
         $post->tags()->sync($tag_ids);
+
+        $types = $request->get('types');
+        $type_ids = $this->syncTypes($types);
+        $post->types()->sync($type_ids);
 
         return redirect()->route('posts.show', ['post' => $post->id]);
     }

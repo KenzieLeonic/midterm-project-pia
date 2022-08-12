@@ -15,7 +15,7 @@
 
     @include('layouts._navbar')
 
-    <div>
+    <div class="mx-auto max-w-7xl">
         @yield('content')
     </div>
 

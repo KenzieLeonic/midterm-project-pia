@@ -4,13 +4,13 @@
 @section('content')
     <section class="mx-8">
         <h1 class="font-mono text-3xl mx-4 mt-6">
-            ประเภท: {{ $tag->name }}
+            หน่วยงาน: {{ $type->name }}
         </h1>
         <p class="mx-8 mt-2">
-            {{ $tag->posts->count() }} posts
+            {{ $type->posts->count() }} posts
         </p>
         <div class="my-1 px-8 py-2 flex flex-wrap justify-between space-y-6">
-            @foreach($tag->posts as $post)
+            @foreach($type->posts as $post)
                 <a href="{{ route('posts.show', ['post' => $post->id]) }}"
                    class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 ">
                     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 ">
@@ -33,7 +33,5 @@
             @endforeach
         </div>
     </section>
-
-
 
 @endsection

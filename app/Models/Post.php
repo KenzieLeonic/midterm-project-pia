@@ -10,6 +10,11 @@ class Post extends Model
 {
     use HasFactory; // trait
 
+    public function types()
+    {
+        return $this->belongsToMany(Type::class);
+    }
+
     /*
      * + ฟังก์ชัน tags() คืนค่า ความสัมพันธ์ belongsToMany
      * + attribute tags คืนค่า collection ของ Tag ที่ผูกกับ Post นี้
