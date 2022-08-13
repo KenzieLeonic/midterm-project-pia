@@ -42,6 +42,8 @@
             @endforeach
         </div>
 
+        <img src="/images/{{ ($post->image) }}"  class="rounded mx-auto" height="400" width="400"/>
+
         <p class="text-gray-900 font-normal p-2 mb-8">
             {{ $post->description }}
         </p>

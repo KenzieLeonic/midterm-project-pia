@@ -52,7 +52,8 @@ class PostController extends Controller
 
         $validated = $request->validate([
             'title' => ['required', 'min:5', 'max:255'],
-            'description' => ['required', 'min:5', 'max:1000']
+            'description' => ['required', 'min:5', 'max:1000'],
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
         $post = new Post();
@@ -60,6 +61,10 @@ class PostController extends Controller
         $post->description = $request->input('description');
 //        $post->user_id = Auth::user()->id;
         $post->user_id = $request->user()->id;
+       // $path = $request->file('image')->store('public/images'); 
+        $imageName = time().'.'.$request->image->extension();  
+        $request->image->move(public_path('images'), $imageName);
+        $post->image = $imageName;
         $post->save();
 
         $tags = $request->get('tags');
@@ -69,7 +74,7 @@ class PostController extends Controller
         $types = $request->get('types');
         $type_ids = $this->syncTypes($types);
         $post->types()->sync($type_ids);
-
+        
         return redirect()->route('posts.show', [ 'post' => $post->id ]);
         //                     --------------------------^
         //                    |
@@ -143,7 +148,11 @@ class PostController extends Controller
 
         $tags = $post->tags->pluck('name')->all();
         $tags = implode(", ", $tags);
-        return view('posts.edit', ['post' => $post, 'tags' => $tags]);
+
+        $types = $post->types->pluck('name')->all();
+        $types = implode(", ", $types);
+
+        return view('posts.edit', ['post' => $post, 'tags' => $tags, 'post' => $post, 'types' => $types]);
     }
 
     /**
@@ -153,15 +162,26 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, $id)
     {
+        $post = Post::find($id);
         $this->authorize('update', $post);
 
         $validated = $request->validate([
             'title' => ['required', 'min:5', 'max:255'],
             'description' => ['required', 'min:5', 'max:1000']
         ]);
-
+        
+        if($request->hasFile('image')){
+            $request->validate([
+              'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            ]);
+            // $path = $request->file('image')->store('public/images');
+            // $post->image = $path;
+            $imageName = time().'.'.$request->image->extension();  
+            $request->image->move(public_path('images'), $imageName);
+            $post->image = $imageName;
+        }
         $post->title = $request->input('title');
         $post->description = $request->input('description');
         $post->save();

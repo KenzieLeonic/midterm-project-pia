@@ -10,6 +10,8 @@ class Post extends Model
 {
     use HasFactory; // trait
 
+    protected $fillable = ['title', 'description','image'];
+
     public function types()
     {
         return $this->belongsToMany(Type::class);
