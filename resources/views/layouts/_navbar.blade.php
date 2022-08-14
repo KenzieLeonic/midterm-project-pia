@@ -36,7 +36,7 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
-                            <x-dropdown-link class="text-white block py-2 pr-4 pl-3 rounded md:p-0.5 hover:bg-[#B3BA1E]" :href="route('logout')"
+                            <x-dropdown-link class="text-white block py-2 pr-4 pl-3 rounded md:p-0.5 hover:decoration-[#86932D] hover:bg-[#B3BA1E]" :href="route('logout')"
                                              onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                 {{ __('ออกจากระบบ') }}
