@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Models\Type;
+use App\Models\Processes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -63,7 +64,7 @@ class PostController extends Controller
         $post->user_id = $request->user()->id;
        // $path = $request->file('image')->store('public/images'); 
         $imageName = time().'.'.$request->image->extension();  
-        $request->image->move(public_path('images'), $imageName);
+        $request->image->move(public_path('storage/app/public/images'), $imageName);
         $post->image = $imageName;
         $post->save();
 
@@ -74,6 +75,8 @@ class PostController extends Controller
         $types = $request->get('types');
         $type_ids = $this->syncTypes($types);
         $post->types()->sync($type_ids);
+
+        $post->processes()->sync(1);
         
         return redirect()->route('posts.show', [ 'post' => $post->id ]);
         //                     --------------------------^
@@ -179,7 +182,7 @@ class PostController extends Controller
             // $path = $request->file('image')->store('public/images');
             // $post->image = $path;
             $imageName = time().'.'.$request->image->extension();  
-            $request->image->move(public_path('images'), $imageName);
+            $request->image->move(public_path('storage/app/public/images'), $imageName);
             $post->image = $imageName;
         }
         $post->title = $request->input('title');

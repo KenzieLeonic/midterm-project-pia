@@ -42,6 +42,16 @@
             @endforeach
         </div>
 
+        <div class="mb-4">
+            @foreach($post->processes as $process)
+                <a href="{{ route('processes.show', ['process' => $process->name]) }}">
+                    <p class="bg-blue-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
+                        {{ $process->name }}
+                    </p>
+                </a>
+            @endforeach
+        </div>
+
         <img src="/images/{{ ($post->image) }}"  class="rounded mx-auto" height="400" width="400"/>
 
         <p class="text-gray-900 font-normal p-2 mb-8">
