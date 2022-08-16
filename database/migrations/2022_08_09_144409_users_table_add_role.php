@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('role')->after('id')->default('USER');
+            $table->string('staff_type')->after('role')->default('null');
         });
     }
 

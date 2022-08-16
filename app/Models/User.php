@@ -52,9 +52,14 @@ class User extends Authenticatable
         return $this->role === 'ADMIN';
     }
 
-    public function isEditor()
+    public function isStudentAffair()
     {
-        return $this->role === 'EDITOR';
+        return $this->role === 'STUDENTAFFAIR';
+    }
+
+    public function isStaff()
+    {
+        return $this->role === 'STAFF';
     }
 
     public function isUser()
