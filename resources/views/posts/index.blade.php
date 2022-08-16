@@ -29,6 +29,7 @@
                         </svg>
                         {{ $post->like_count }} likes
                     </p>
+                    <img src="/images/{{ ($post->image) }}" height="75" width="75" alt="" />
                 </a>
             @endforeach
         </div>

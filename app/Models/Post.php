@@ -10,6 +10,8 @@ class Post extends Model
 {
     use HasFactory; // trait
 
+    protected $fillable = ['title', 'description','image'];
+
     public function types()
     {
         return $this->belongsToMany(Type::class);
@@ -22,6 +24,11 @@ class Post extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function processes()
+    {
+        return $this->belongsToMany(Process::class);
     }
 
     public function user()

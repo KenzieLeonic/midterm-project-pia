@@ -46,6 +46,16 @@ class UserSeeder extends Seeder
             $user->save();
         }
 
+        $user = User::where('email', 'aungpor.napat@gmail.com')->first();
+        if (!$user) {
+            $user = new User;
+            $user->name = "aungpor";
+            $user->role = 'ADMIN';
+            $user->email = 'aungpor.napat@gmail.com';
+            $user->password = Hash::make('aungpor1');
+            $user->save();
+        }
+
         User::factory(5)->create();
     }
 }

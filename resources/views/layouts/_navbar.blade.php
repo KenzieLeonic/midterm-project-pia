@@ -47,13 +47,13 @@
                     <li>
                         <a href="{{ route('login') }}"
                            class="block py-2 pr-4 pl-3 rounded md:p-0 hover:underline @if(Route::currentRouteName() === 'login') current-page @endif" >
-                            Login
+                            เข้าสู่ระบบ
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('register') }}"
                            class="block py-2 pr-4 pl-3 rounded md:p-0 hover:underline @if(Route::currentRouteName() === 'register') current-page @endif" >
-                            Register
+                            ลงทะเบียน
                         </a>
                     </li>
                 @endauth

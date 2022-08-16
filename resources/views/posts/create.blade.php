@@ -6,7 +6,7 @@
             แจ้งเรื่องร้องเรียน
         </h1>
 
-        <form action="{{ route('posts.store') }}" method="post">
+        <form action="{{ route('posts.store') }}" method="post" enctype="multipart/form-data">
             @csrf
 
             <div class="relative z-0 mb-6 w-full group">
@@ -34,9 +34,13 @@
 
             <div class="relative z-0 mb-6 w-full group">
                 <label class="label-gray" for="types">หน่วยงาน</label>
-                <input type="text" name="types" id="types"
-                       class="input-gray bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                       placeholder="เช่น คณะวิทยาศาสตร์, สบศ., กองกิจการนิสิต, ..." autocomplete="off">
+                <select name="types" id="types" class="input-gray bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="คณะวิทยาศาสตร์">คณะวิทยาศาสตร์</option>
+                    <option value="สบศ.">สบศ.</option>
+                    <option value="กองกิจการนิสิต">กองกิจการนิสิต</option>
+                    <option value="องค์การนิสิต">องค์การนิสิต</option>
+                    <option value="โปรดเลือกหน่วยงานที่เกี่ยวข้อง"selected>โปรดเลือกหน่วยงานที่เกี่ยวข้อง</option>
+                </select>
             </div>
 
             <div class="relative z-0 mb-6 w-full group">
