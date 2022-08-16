@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignIdFor(\App\Models\Post::class);   // `post_id`
             $table->foreignIdFor(\App\Models\Type::class);   // `type_id`
             $table->timestamps();
+            //test
         });
     }
 
