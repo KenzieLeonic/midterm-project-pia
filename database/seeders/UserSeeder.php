@@ -16,23 +16,35 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::where('email', 'admin@example.com')->first();
+        $user = User::where('email', 'aungpor.napat@gmail.com')->first();
         if (!$user) {
             $user = new User;
-            $user->name = "Administrator S.";
+            $user->name = "aungpor";
             $user->role = 'ADMIN';
-            $user->email = 'admin@example.com';
-            $user->password = Hash::make('adminpass');
+            $user->email = 'aungpor.napat@gmail.com';
+            $user->password = Hash::make('aungpor1');
             $user->save();
         }
 
-        $user = User::where('email', 'editor@example.com')->first();
+        $user = User::where('email', 'student.affair@gmail.com')->first();
         if (!$user) {
             $user = new User;
-            $user->name = "Editar L.";
-            $user->role = 'EDITOR';
-            $user->email = 'editor@example.com';
-            $user->password = Hash::make('editorpass');
+            $user->name = "Rose";
+            $user->role = 'STUDENTAFFAIR';
+            $user->staff_type = "staff_test1";
+            $user->email = 'student.affair@gmail.com';
+            $user->password = Hash::make('student affair');
+            $user->save();
+        }
+
+        $user = User::where('email', 'staff@gmail.com')->first();
+        if (!$user) {
+            $user = new User;
+            $user->name = "Bueaty";
+            $user->role = 'STAFF';
+            $user->staff_type = "staff_test2";
+            $user->email = 'staff@gmail.com';
+            $user->password = Hash::make('staffpass');
             $user->save();
         }
 
@@ -43,16 +55,6 @@ class UserSeeder extends Seeder
             $user->role = 'USER';
             $user->email = 'user01@example.com';
             $user->password = Hash::make('userpass');
-            $user->save();
-        }
-
-        $user = User::where('email', 'aungpor.napat@gmail.com')->first();
-        if (!$user) {
-            $user = new User;
-            $user->name = "aungpor";
-            $user->role = 'ADMIN';
-            $user->email = 'aungpor.napat@gmail.com';
-            $user->password = Hash::make('aungpor1');
             $user->save();
         }
 
