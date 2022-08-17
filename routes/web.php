@@ -33,3 +33,5 @@ Route::resource('/tags', \App\Http\Controllers\TagController::class);
 Route::resource('/types', \App\Http\Controllers\TypeController::class);
 
 Route::resource('/processes', \App\Http\Controllers\ProcessController::class);
+
+Route::resource('/staffs', \App\Http\Controllers\StaffController::class);
