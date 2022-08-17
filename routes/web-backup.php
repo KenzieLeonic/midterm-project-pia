@@ -31,4 +31,3 @@ Route::resource('/posts', \App\Http\Controllers\PostController::class);
 
 Route::resource('/tags', \App\Http\Controllers\TagController::class);
 
-Route::get('/test', [\App\Http\Controllers\ChartJSController::class, 'index']);

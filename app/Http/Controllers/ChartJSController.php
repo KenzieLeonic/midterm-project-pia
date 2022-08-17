@@ -17,15 +17,16 @@ class ChartJSController extends Controller
 
     public function index()
     {
-        $types = Type::select(DB::raw("COUNT(*) as count"), DB::raw("MONTHNAME(created_at) as month_name"))
-            ->whereYear('created_at', date('Y'))
-            ->groupBy(DB::raw("Month(created_at)"))
-            ->pluck('count', 'month_name');
 
-        $labels = $types->key();
+        $types = Type::select(DB::raw('name,count(*) as count'))
+            ->groupby('name')
+            ->orderBy('count','asc')
+            ->pluck('count', 'name');
+
+        $labels = $types->keys();
         $data = $types->values();
 
-        return view('chart.index',compact('labels','data'));
+        return view('admin.index',compact('labels','data'));
     }
 
     /**

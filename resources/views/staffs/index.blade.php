@@ -1,10 +1,9 @@
-{{-- resources/views/posts/index.blade.php --}}
 @extends('layouts.main')
 
 @section('content')
     <section class="mx-8">
         <h1 class="text-3xl mx-4 mt-6">
-            All Posts
+            Staff Page
         </h1>
         <div class="my-1 px-8 py-2 flex flex-wrap justify-between space-y-6">
             @foreach($posts as $post)
@@ -30,16 +29,6 @@
                         {{ $post->like_count }} likes
                     </p>
                     <img src="/images/{{ ($post->image) }}" height="75" width="75" alt="" />
-
-                    <div>
-                        @foreach($post->processes as $process)
-                            <a href="{{ route('processes.show', ['process' => $process->name]) }}">
-                                <p class="bg-blue-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
-                                    {{ $process->name }}
-                                </p>
-                            </a>
-                        @endforeach
-                    </div>
                 </a>
             @endforeach
         </div>
