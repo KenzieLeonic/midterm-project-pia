@@ -15,13 +15,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect()->route('posts.index');
+
 });
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::get('/charts', [\App\Http\Controllers\ChartJSController::class, 'index']);
+Route::get('/posts/dashboard', [\App\Http\Controllers\ChartJSController::class]);
 
 require __DIR__.'/auth.php';
 
@@ -35,3 +36,5 @@ Route::resource('/tags', \App\Http\Controllers\TagController::class);
 Route::resource('/types', \App\Http\Controllers\TypeController::class);
 
 Route::resource('/processes', \App\Http\Controllers\ProcessController::class);
+
+

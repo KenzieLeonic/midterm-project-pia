@@ -7,15 +7,22 @@ use Illuminate\Http\Request;
 
 class ProcessController extends Controller
 {
+//    for condition
+    public function __construct()
+    {
+       //put middlwware
+    }
+
     public function index()
     {
         $processes = Process::get();
         return view('processes.index', ['processes' => $processes]);
     }
 
-    public function show($id)
+    public function show($id,$user)
     {
         $process = Process::where('name', $id)->firstOrFail();
         return view('processes.show', ['process' => $process]);
     }
+
 }

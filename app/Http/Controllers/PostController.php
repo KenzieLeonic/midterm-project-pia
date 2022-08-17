@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\Process;
 use App\Models\Tag;
 use App\Models\Type;
 use App\Models\Processes;
@@ -62,8 +63,8 @@ class PostController extends Controller
         $post->description = $request->input('description');
 //        $post->user_id = Auth::user()->id;
         $post->user_id = $request->user()->id;
-       // $path = $request->file('image')->store('public/images'); 
-        $imageName = time().'.'.$request->image->extension();  
+       // $path = $request->file('image')->store('public/images');
+        $imageName = time().'.'.$request->image->extension();
         $request->image->move(public_path('storage/app/public/images'), $imageName);
         $post->image = $imageName;
         $post->save();
@@ -77,7 +78,6 @@ class PostController extends Controller
         $post->types()->sync($type_ids);
 
         $post->processes()->sync(1);
-        
         return redirect()->route('posts.show', [ 'post' => $post->id ]);
         //                     --------------------------^
         //                    |
@@ -122,6 +122,25 @@ class PostController extends Controller
             $tag_ids[] = $tag->id;
         }
         return $tag_ids;
+    }
+
+    private function syncProcesses($processes){
+        $processes = explode(",", $processes);
+        $processes = array_map(function ($v) {
+            return Str::ucfirst(trim($v));
+        }, $processes);
+
+        $process_ids = [];
+        foreach ($processes as $process_name) {
+            $process = Process::where('name', $process_name)->first();
+            if(!$process){
+                $process = new Process();
+                $process->name = $process_name;
+                $process->save();
+            }
+            $process_ids[] = $process->id;
+        }
+        return $process_ids;
     }
 
     /**
@@ -174,14 +193,14 @@ class PostController extends Controller
             'title' => ['required', 'min:5', 'max:255'],
             'description' => ['required', 'min:5', 'max:1000']
         ]);
-        
+
         if($request->hasFile('image')){
             $request->validate([
               'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             ]);
             // $path = $request->file('image')->store('public/images');
             // $post->image = $path;
-            $imageName = time().'.'.$request->image->extension();  
+            $imageName = time().'.'.$request->image->extension();
             $request->image->move(public_path('storage/app/public/images'), $imageName);
             $post->image = $imageName;
         }
@@ -196,6 +215,7 @@ class PostController extends Controller
         $types = $request->get('types');
         $type_ids = $this->syncTypes($types);
         $post->types()->sync($type_ids);
+
 
         return redirect()->route('posts.show', ['post' => $post->id]);
     }
@@ -226,4 +246,6 @@ class PostController extends Controller
         $post->comments()->save($comment);
         return redirect()->route('posts.show', ['post' => $post->id]);
     }
+
+
 }

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Process;
+use App\Models\Type;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ChartJSController extends Controller
 {
@@ -11,9 +14,18 @@ class ChartJSController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
-        //
+        $types = Type::select(DB::raw("COUNT(*) as count"), DB::raw("MONTHNAME(created_at) as month_name"))
+            ->whereYear('created_at', date('Y'))
+            ->groupBy(DB::raw("Month(created_at)"))
+            ->pluck('count', 'month_name');
+
+        $labels = $types->key();
+        $data = $types->values();
+
+        return view('chart.index',compact('labels','data'));
     }
 
     /**
@@ -45,7 +57,7 @@ class ChartJSController extends Controller
      */
     public function show($id)
     {
-        //
+        //;
     }
 
     /**
