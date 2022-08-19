@@ -19,7 +19,7 @@ class ProcessSeeder extends Seeder
         $process = Process::first();
         if (!$process) {
             $this->command->line("Generating process status");
-            $processes = ['รออนุมัติ', 'ไม่อนุมัติ',  'อนุมัติ', 'รอดำเนินการ', 'เสร็จสิ้น'];
+            $processes = ['รอรับเรื่อง', 'ไม่อนุมัติ', 'ดำเนินการ', 'เสร็จสิ้น'];
             collect($processes)->each(function ($process_name, $key) {
                 $process = new Process;
                 $process->name = $process_name;

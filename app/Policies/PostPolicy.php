@@ -53,7 +53,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post)
     {
-        return $user->isAdmin() or $user->isStudentAffair() or
+        return $user->isAdmin() or $user->isStaff() or $user->isStudentAffair() or
             ($user->isUser() and $user->id === $post->user_id);
     }
 
