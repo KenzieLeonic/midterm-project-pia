@@ -63,9 +63,15 @@ class PostController extends Controller
         $post->description = $request->input('description');
 //        $post->user_id = Auth::user()->id;
         $post->user_id = $request->user()->id;
+<<<<<<< HEAD
        // $path = $request->file('image')->store('public/images');
         $imageName = time().'.'.$request->image->extension();
         $request->image->move(public_path('storage/app/public/images'), $imageName);
+=======
+       // $path = $request->file('image')->store('public/images'); 
+        $imageName = time().'.'.$request->image->extension();  
+        $request->image->move(public_path('images'), $imageName);
+>>>>>>> 4f8982ca674e1b5ef7268c28bcfc63fdec10817a
         $post->image = $imageName;
         $post->save();
 
@@ -200,8 +206,13 @@ class PostController extends Controller
             ]);
             // $path = $request->file('image')->store('public/images');
             // $post->image = $path;
+<<<<<<< HEAD
             $imageName = time().'.'.$request->image->extension();
             $request->image->move(public_path('storage/app/public/images'), $imageName);
+=======
+            $imageName = time().'.'.$request->image->extension();  
+            $request->image->move(public_path('images'), $imageName);
+>>>>>>> 4f8982ca674e1b5ef7268c28bcfc63fdec10817a
             $post->image = $imageName;
         }
         $post->title = $request->input('title');
