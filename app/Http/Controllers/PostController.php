@@ -64,7 +64,7 @@ class PostController extends Controller
         $post->user_id = $request->user()->id;
        // $path = $request->file('image')->store('public/images'); 
         $imageName = time().'.'.$request->image->extension();  
-        $request->image->move(public_path('storage/app/public/images'), $imageName);
+        $request->image->move(public_path('images'), $imageName);
         $post->image = $imageName;
         $post->save();
 
@@ -182,7 +182,7 @@ class PostController extends Controller
             // $path = $request->file('image')->store('public/images');
             // $post->image = $path;
             $imageName = time().'.'.$request->image->extension();  
-            $request->image->move(public_path('storage/app/public/images'), $imageName);
+            $request->image->move(public_path('images'), $imageName);
             $post->image = $imageName;
         }
         $post->title = $request->input('title');

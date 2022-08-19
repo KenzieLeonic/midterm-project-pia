@@ -30,8 +30,9 @@ class ProcessSeeder extends Seeder
         $this->command->line("Generating processes for all posts");
         $posts = Post::get();
         $posts->each(function($post, $key) {
-            $n = fake()->numberBetween(1,2);
-            $post->processes()->sync($n);
+            $n = fake()->numberBetween(1,1);
+            $process_ids = Process::inRandomOrder()->limit($n)->get()->pluck(['id'])->all();
+            $post->processes()->sync($process_ids);
         });
     }
 }

@@ -30,7 +30,7 @@ class TypeSeeder extends Seeder
         $this->command->line("Generating types for all posts");
         $posts = Post::get();
         $posts->each(function($post, $key) {
-            $n = fake()->numberBetween(1,2);
+            $n = fake()->numberBetween(1,1);
             $type_ids = Type::inRandomOrder()->limit($n)->get()->pluck(['id'])->all();
             $post->types()->sync($type_ids);
         });
