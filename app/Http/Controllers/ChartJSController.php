@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use App\Models\Process;
 use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Tag;
 
 class ChartJSController extends Controller
 {
@@ -17,81 +19,39 @@ class ChartJSController extends Controller
 
     public function index()
     {
-
-        $types = Type::select(DB::raw('name,count(*) as count'))
-            ->groupby('name')
-            ->orderBy('count','asc')
+        //type data
+        $type_total_raw = DB::raw('count(*) as count');
+        $group_types = Type::getQuery()
+            ->select('name', $type_total_raw)
+            ->groupBy('name')
             ->pluck('count', 'name');
 
-        $labels = $types->keys();
-        $data = $types->values();
+        $types_labels = $group_types->keys();
+        $types_dataset = $group_types->values();
 
-        return view('admin.index',compact('labels','data'));
-    }
+        //tags data
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+        $tag_total_raw = DB::raw('count(*) as count');
+        $group_tags = Tag::getQuery()
+            ->select('name', $tag_total_raw)
+            ->groupby('name')
+            ->pluck('count', 'name');
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $tags_labels = $group_tags->keys();
+        $tags_dataset = $group_tags->values();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //;
-    }
+        //processes data
+        $process_total_raw = DB::raw('count(*) as count');
+        $group_processes = Process::getQuery()
+            ->select('name', $process_total_raw)
+            ->groupby('name')
+            ->pluck('count', 'name');
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+        $processes_labels = $group_processes->keys();
+        $processes_dataset = $group_processes->values();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return view('admin.index', compact('types_labels', 'types_dataset',
+            'tags_labels','tags_dataset',
+        'processes_labels','processes_dataset'));
     }
 }

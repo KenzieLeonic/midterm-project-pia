@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Routing\Route as RoutingRoute;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,3 +41,4 @@ Route::resource('/processes', \App\Http\Controllers\ProcessController::class);
 Route::resource('/charts',\App\Http\Controllers\ChartJSController::class);
 
 Route::resource('/staffs', \App\Http\Controllers\StaffController::class);
+
