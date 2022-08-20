@@ -1,9 +1,15 @@
 @extends('layouts.main')
 @section('content')
-    <div class="chartbox flex w-1/4" >
+    <div class="static">
+    <div class="chartbox flex w-1/3" >
         <canvas id="myChart"></canvas>
         <canvas id="lineChart"></canvas>
-        <canvas id="pieChart"></canvas>
+    </div>
+
+    <div class="chartbox flex w-2/3">
+        <canvas id="barChart"></canvas>
+    </div>
+
     </div>
 
 
@@ -93,28 +99,53 @@
 
         //config
         const config = {
-            type: 'doughnut', // type of chart
+            type: 'polarArea', // type of chart
             data: typeData,
-            options: {}
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'ประเภทสำนักงาน'
+                    },
+                }
+            }
         };
         //render barChart
         const config2 = {
-            type: 'bar',
+            type: 'line',
             data: tagData,
             options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'หมวดหมู่ปัญหารายเดือน'
                     }
                 }
             },
         };
         //reader for tagData (barChart)
         const config3 = {
-            type: 'pie',
+            type: 'bar',
             data: processData,
-            options: {},
-        }
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    },
+
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'สถานะรับงาน'
+                    },
+                }
+            }
+        };
 
         //config init blog
         const myChart = new Chart(
@@ -128,8 +159,8 @@
         );
 
         //config pieChart
-        const pirChart = new Chart(
-            document.getElementById('pieChart'), config3
+        const pieChart = new Chart(
+            document.getElementById('barChart'), config3
         )
 
     </script>

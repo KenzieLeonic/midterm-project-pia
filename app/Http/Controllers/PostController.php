@@ -63,15 +63,12 @@ class PostController extends Controller
         $post->description = $request->input('description');
 //        $post->user_id = Auth::user()->id;
         $post->user_id = $request->user()->id;
-<<<<<<< HEAD
+
        // $path = $request->file('image')->store('public/images');
         $imageName = time().'.'.$request->image->extension();
-        $request->image->move(public_path('storage/app/public/images'), $imageName);
-=======
-       // $path = $request->file('image')->store('public/images'); 
-        $imageName = time().'.'.$request->image->extension();  
         $request->image->move(public_path('images'), $imageName);
->>>>>>> 4f8982ca674e1b5ef7268c28bcfc63fdec10817a
+
+
         $post->image = $imageName;
         $post->save();
 
@@ -85,9 +82,7 @@ class PostController extends Controller
 
         $post->processes()->sync(1);
         return redirect()->route('posts.show', [ 'post' => $post->id ]);
-        //                     --------------------------^
-        //                    |
-        // GET|HEAD  posts/{post} ........ posts.show › PostController@show
+
     }
 
     private function syncTypes($types)
@@ -200,63 +195,13 @@ class PostController extends Controller
             'description' => ['required', 'min:5', 'max:1000']
         ]);
 
-        if($request->hasFile('image')){
+        if ($request->hasFile('image')) {
             $request->validate([
-              'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+                'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             ]);
             // $path = $request->file('image')->store('public/images');
             // $post->image = $path;
-<<<<<<< HEAD
-            $imageName = time().'.'.$request->image->extension();
-            $request->image->move(public_path('storage/app/public/images'), $imageName);
-=======
-            $imageName = time().'.'.$request->image->extension();  
-            $request->image->move(public_path('images'), $imageName);
->>>>>>> 4f8982ca674e1b5ef7268c28bcfc63fdec10817a
-            $post->image = $imageName;
         }
-        $post->title = $request->input('title');
-        $post->description = $request->input('description');
-        $post->save();
-
-        $tags = $request->get('tags');
-        $tag_ids = $this->syncTags($tags);
-        $post->tags()->sync($tag_ids);
-
-        $types = $request->get('types');
-        $type_ids = $this->syncTypes($types);
-        $post->types()->sync($type_ids);
-
-
-        return redirect()->route('posts.show', ['post' => $post->id]);
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request, Post $post)
-    {
-        $this->authorize('delete', $post);
-
-        $title = $request->input('title');
-        if ($title == $post->title) {
-            $post->delete();
-            return redirect()->route('posts.index');
-        }
-
-        return redirect()->back();
-    }
-
-    public function storeComment(Request $request, Post $post)
-    {
-        $comment = new Comment();
-        $comment->message = $request->get('message');
-        $post->comments()->save($comment);
-        return redirect()->route('posts.show', ['post' => $post->id]);
-    }
-
 
 }

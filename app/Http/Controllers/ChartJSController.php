@@ -20,35 +20,40 @@ class ChartJSController extends Controller
     public function index()
     {
         //type data
-        $type_total_raw = DB::raw('count(*) as count');
-        $group_types = Type::getQuery()
-            ->select('name', $type_total_raw)
-            ->groupBy('name')
-            ->pluck('count', 'name');
+        $types_label = [];
+        $types_value = [];
+        $types = Type::get();
+        foreach ($types as $type){
+            array_push($types_label,$type->name);
+            array_push($types_value,$type->posts->count());
+    }
+        $types_labels = array_values($types_label);
+        $types_dataset = array_values($types_value);
 
-        $types_labels = $group_types->keys();
-        $types_dataset = $group_types->values();
 
-        //tags data
+//        tags data
 
-        $tag_total_raw = DB::raw('count(*) as count');
-        $group_tags = Tag::getQuery()
-            ->select('name', $tag_total_raw)
-            ->groupby('name')
-            ->pluck('count', 'name');
-
-        $tags_labels = $group_tags->keys();
-        $tags_dataset = $group_tags->values();
+        $tags_label = [];
+        $tags_value = [];
+        $tags = Tag::get();
+        foreach ($tags as $tag){
+            array_push($tags_label, $tag->name);
+            array_push($tags_value, $tag->posts->count());
+        }
+        $tags_labels = array_values($tags_label);
+        $tags_dataset = array_values($tags_value);
 
         //processes data
-        $process_total_raw = DB::raw('count(*) as count');
-        $group_processes = Process::getQuery()
-            ->select('name', $process_total_raw)
-            ->groupby('name')
-            ->pluck('count', 'name');
 
-        $processes_labels = $group_processes->keys();
-        $processes_dataset = $group_processes->values();
+        $process_label = [];
+        $process_value = [];
+        $processes = Process::get();
+        foreach ($processes as $process){
+            array_push($process_label, $process->name);
+            array_push($process_value, $process->posts->count());
+        }
+        $processes_labels = array_values($process_label);
+        $processes_dataset = array_values($process_value);
 
         return view('admin.index', compact('types_labels', 'types_dataset',
             'tags_labels','tags_dataset',
