@@ -9,7 +9,7 @@ class StaffController extends Controller
 {
     public function index()
     {
-        $posts = Post::latest()->paginate(50);
+        $posts = Post::latest()->simplePaginate(50);
         return view('staffs.index', ['posts' => $posts]);
     }
 

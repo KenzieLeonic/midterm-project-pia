@@ -90,7 +90,11 @@
 
             <div class="relative z-0 my-6 w-full group bg-gray-200 rounded p-6">
                 <label for="image" class="label-gray my-3">แก้ไขรูปภาพ</label>
-                <img src="/images/{{ ($post->image) }}" class="rounded mx-auto" height="300" width="300"/>
+                @if($post->image)    
+                    <img src="/images/{{ ($post->image) }}" class="p-1 rounded mx-auto" height="300" width="300"/>
+                @else
+                    <img src="/images/no-image.jpg" class="p-1 rounded mx-auto" height="300" width="300"/>
+                @endif
                 <input class="label-gray mt-3" type="file" id="image" name="image"><br><br>
             </div>
 
@@ -148,7 +152,11 @@
 
                 <div class="relative z-0 my-6 w-full group bg-gray-200 rounded p-6">
                     <label for="image" class="label-gray my-3">แก้ไขรูปภาพ</label>
-                    <img src="/images/{{ ($post->image) }}" class="rounded mx-auto" height="300" width="300"/>
+                    @if($post->image)    
+                        <img src="/images/{{ ($post->image) }}" class="p-1 rounded mx-auto" height="300" width="300"/>
+                    @else
+                        <img src="/images/no-image.jpg" class="p-1 rounded mx-auto" height="300" width="300"/>
+                    @endif
                     <input class="label-gray mt-3" type="file" id="image" name="image"><br><br>
                 </div>
 
@@ -159,6 +167,7 @@
         </form>
     </section>
 
+    @can('delete', $post)
     <section class="mx-8 mt-16">
         <div class="relative py-4">
             <div class="absolute inset-0 flex items-center">
@@ -192,5 +201,5 @@
             </form>
         </div>
     </section>
-
+    @endcan
 @endsection

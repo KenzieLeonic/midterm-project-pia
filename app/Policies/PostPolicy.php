@@ -21,6 +21,26 @@ class PostPolicy
         return true;
     }
 
+    public function viewForAdmin(User $user)
+    {
+        return $user->isAdmin();
+    }
+
+    public function viewForStaff(User $user)
+    {
+        return $user->isStaff();
+    }
+
+    public function viewForStudentAffair(User $user)
+    {
+        return $user->isStudentAffair();
+    }
+    
+    public function viewForUser(User $user)
+    {
+        return $user->isUser();
+    }
+
     /**
      * Determine whether the user can view the post.
      *
@@ -66,7 +86,7 @@ class PostPolicy
      */
     public function delete(User $user, Post $post)
     {
-        return $user->isAdmin();
+        return $user->isAdmin() or $user->isStudentAffair() or $user->isUser();
     }
 
     /**
