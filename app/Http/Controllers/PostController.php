@@ -16,7 +16,7 @@ class PostController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth')->except(['index', 'show']);
+        $this->middleware('auth')->except(['index', 'show', 'search']);
     }
 
     /**
@@ -260,7 +260,9 @@ class PostController extends Controller
         return redirect()->route('posts.show', ['post' => $post->id]);
     }
 
-    public function test(Post $post){
-
+    public function search(Request $request){
+        $search = $request->input('search');
+        $posts = Post::FilterTitle($search)->get();
+        return view('posts.search', ['posts' => $posts]);
     }
 }
