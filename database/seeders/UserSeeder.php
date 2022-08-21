@@ -26,12 +26,22 @@ class UserSeeder extends Seeder
             $user->save();
         }
 
+        $user = User::where('email', 'ployputita@gmail.com')->first();
+        if (!$user) {
+            $user = new User;
+            $user->name = "ploy";
+            $user->role = 'ADMIN';
+            $user->email = 'ployputita@gmail.com';
+            $user->password = Hash::make('ployputita');
+            $user->save();
+        }
+
         $user = User::where('email', 'student.affair@gmail.com')->first();
         if (!$user) {
             $user = new User;
             $user->name = "Rose";
             $user->role = 'STUDENTAFFAIR';
-            $user->staff_type = "staff_test1";
+            $user->staff_type = "null";
             $user->email = 'student.affair@gmail.com';
             $user->password = Hash::make('student affair');
             $user->save();
@@ -40,11 +50,22 @@ class UserSeeder extends Seeder
         $user = User::where('email', 'staff@gmail.com')->first();
         if (!$user) {
             $user = new User;
-            $user->name = "Bueaty";
+            $user->name = "Beauty";
             $user->role = 'STAFF';
-            $user->staff_type = "staff_test2";
+            $user->staff_type = "คณะวิทยาศาสตร์";
             $user->email = 'staff@gmail.com';
             $user->password = Hash::make('staffpass');
+            $user->save();
+        }
+
+        $user = User::where('email', 'Peter@gmail.com')->first();
+        if (!$user) {
+            $user = new User;
+            $user->name = "Peter";
+            $user->role = 'MANAGER';
+            $user->staff_type = "null";
+            $user->email = 'Peter@gmail.com';
+            $user->password = Hash::make('managerpass');
             $user->save();
         }
 

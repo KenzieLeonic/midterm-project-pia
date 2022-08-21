@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Post;
-use App\Models\Process;
 use App\Models\Tag;
 use App\Models\Type;
-use App\Models\Processes;
+use App\Models\Process;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -17,7 +16,7 @@ class PostController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth')->except(['index', 'show']);
+        $this->middleware('auth')->except(['index', 'show', 'search']);
     }
 
     /**
@@ -63,12 +62,9 @@ class PostController extends Controller
         $post->description = $request->input('description');
 //        $post->user_id = Auth::user()->id;
         $post->user_id = $request->user()->id;
-
-       // $path = $request->file('image')->store('public/images');
-        $imageName = time().'.'.$request->image->extension();
+       // $path = $request->file('image')->store('public/images'); 
+        $imageName = time().'.'.$request->image->extension();  
         $request->image->move(public_path('images'), $imageName);
-
-
         $post->image = $imageName;
         $post->save();
 
@@ -81,8 +77,11 @@ class PostController extends Controller
         $post->types()->sync($type_ids);
 
         $post->processes()->sync(1);
+        
         return redirect()->route('posts.show', [ 'post' => $post->id ]);
-
+        //                     --------------------------^
+        //                    |
+        // GET|HEAD  posts/{post} ........ posts.show › PostController@show
     }
 
     private function syncTypes($types)
@@ -125,7 +124,8 @@ class PostController extends Controller
         return $tag_ids;
     }
 
-    private function syncProcesses($processes){
+    private function syncProcesses($processes)
+    {
         $processes = explode(",", $processes);
         $processes = array_map(function ($v) {
             return Str::ucfirst(trim($v));
@@ -134,7 +134,7 @@ class PostController extends Controller
         $process_ids = [];
         foreach ($processes as $process_name) {
             $process = Process::where('name', $process_name)->first();
-            if(!$process){
+            if (!$process) {
                 $process = new Process();
                 $process->name = $process_name;
                 $process->save();
@@ -143,6 +143,7 @@ class PostController extends Controller
         }
         return $process_ids;
     }
+
 
     /**
      * Display the specified resource.
@@ -165,8 +166,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Post $post)
+    public function edit(Post $post, Request $request)
     {
+        $user = $request->user();
         $this->authorize('update', $post);
 
         $tags = $post->tags->pluck('name')->all();
@@ -175,7 +177,10 @@ class PostController extends Controller
         $types = $post->types->pluck('name')->all();
         $types = implode(", ", $types);
 
-        return view('posts.edit', ['post' => $post, 'tags' => $tags, 'post' => $post, 'types' => $types]);
+        $processes = $post->processes->pluck('name')->all();
+        $processes = implode(", ", $processes);
+
+        return view('posts.edit', ['post' => $post, 'tags' => $tags, 'post' => $post, 'types' => $types, 'processes' => $processes, 'user' => $user]);
     }
 
     /**
@@ -194,14 +199,70 @@ class PostController extends Controller
             'title' => ['required', 'min:5', 'max:255'],
             'description' => ['required', 'min:5', 'max:1000']
         ]);
-
-        if ($request->hasFile('image')) {
+        
+        if($request->hasFile('image')){
             $request->validate([
-                'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+              'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             ]);
             // $path = $request->file('image')->store('public/images');
             // $post->image = $path;
+            $imageName = time().'.'.$request->image->extension();  
+            $request->image->move(public_path('images'), $imageName);
+            $post->image = $imageName;
         }
+        $post->title = $request->input('title');
+        $post->description = $request->input('description');
+        $post->save();
+
+        $tags = $request->get('tags');
+        $tag_ids = $this->syncTags($tags);
+        $post->tags()->sync($tag_ids);
+
+        $types = $request->get('types');
+        $type_ids = $this->syncTypes($types);
+        $post->types()->sync($type_ids);
+
+        $user = $request->user();
+        if($user->isAdmin() or $user->isStaff() or $user->isStudentAffair()){
+            $processes = $request->get('processes');
+            $process_ids = $this->syncProcesses($processes);
+            $post->processes()->sync($process_ids);
+        }
+        
+
+        return redirect()->route('posts.show', ['post' => $post->id]);
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request, Post $post)
+    {
+        $this->authorize('delete', $post);
+
+        $title = $request->input('title');
+        if ($title == $post->title) {
+            $post->delete();
+            return redirect()->route('posts.index');
+        }
+
+        return redirect()->back();
+    }
+
+    public function storeComment(Request $request, Post $post)
+    {
+        $comment = new Comment();
+        $comment->message = $request->get('message');
+        $post->comments()->save($comment);
+        return redirect()->route('posts.show', ['post' => $post->id]);
+    }
+
+    public function search(Request $request){
+        $search = $request->input('search');
+        $posts = Post::FilterTitle($search)->get();
+        return view('posts.search', ['posts' => $posts]);
+    }
 }

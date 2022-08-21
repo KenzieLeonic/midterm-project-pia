@@ -30,6 +30,8 @@ require __DIR__.'/auth.php';
 Route::post('/posts/{post}/comments', [\App\Http\Controllers\PostController::class, 'storeComment'])
     ->name('posts.comments.store');
 
+Route::get('/posts/search', [\App\Http\Controllers\PostController::class, 'search'])->name('posts.search');
+
 Route::resource('/posts', \App\Http\Controllers\PostController::class);
 
 Route::resource('/tags', \App\Http\Controllers\TagController::class);

@@ -6,11 +6,31 @@
         <h1 class="text-3xl mb-1">
             {{ $post->title }}
             @foreach($post->processes as $process)
-                <a href="{{ route('processes.show', ['process' => $process->name]) }}">
-                    <p class="bg-blue-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
-                        {{ $process->name }}
-                    </p>
-                </a>
+                @if($process->name == 'รอรับเรื่อง') 
+                    <a href="{{ route('processes.show', ['process' => $process->name]) }}">
+                        <p class="border-2 border-blue-300 text-blue-400 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
+                            {{ $process->name }}
+                        </p>
+                    </a>
+                @elseif($process->name == 'ดำเนินการ') 
+                    <a href="{{ route('processes.show', ['process' => $process->name]) }}">
+                        <p class="border-2 border-yellow-300 text-yellow-400 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
+                          {{ $process->name }}
+                        </p>
+                    </a>
+                @elseif($process->name == 'เสร็จสิ้น') 
+                    <a href="{{ route('processes.show', ['process' => $process->name]) }}">
+                        <p class="border-2 border-[#B3BA1E] text-[#B3BA1E] text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
+                            {{ $process->name }}
+                        </p>
+                    </a>
+                @elseif($process->name == 'ไม่อนุมัติ') 
+                    <a href="{{ route('processes.show', ['process' => $process->name]) }}">
+                        <p class="border-2 border-red-300 text-red-400 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
+                            {{ $process->name }}
+                        </p>
+                    </a>
+                @endif
             @endforeach
         </h1>
 
@@ -42,6 +62,12 @@
             @endforeach
         </div>
 
+        @canany(['viewForStudentAffair', 'viewForAdmin'], $post)
+        <p>
+            By {{ $post->user->name }}
+        </p>
+        @endcanany
+        
         <div class="m-4">
             @if($post->image)    
                 <img src="/images/{{ ($post->image) }}" class="p-1 rounded mx-auto" height="400" width="400"/>
@@ -49,8 +75,6 @@
                 <img src="/images/no-image.jpg" class="p-1 rounded mx-auto" height="400" width="400"/>
             @endif
         </div>
-
-        
 
         <p class="text-gray-900 font-normal p-2 mb-8">
             {{ $post->description }}
