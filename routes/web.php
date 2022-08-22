@@ -36,4 +36,4 @@ Route::resource('/types', \App\Http\Controllers\TypeController::class);
 
 Route::resource('/processes', \App\Http\Controllers\ProcessController::class);
 
-Route::resource('/staffs', \App\Http\Controllers\StaffController::class);
+Route::get('/posts/like/{post}', [\App\Http\Controllers\PostController::class, 'like'])->name('posts.like');

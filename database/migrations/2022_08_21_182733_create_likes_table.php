@@ -13,13 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('likes', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('description');
-            $table->integer('view_count')->default(0);
-            $table->integer('like_count')->default(0);
-            $table->string('image')->nullable()->default(null);
+            $table->foreignIdFor(\App\Models\Post::class);
+            $table->foreignIdFor(\App\Models\User::class);
+            $table->integer('like');
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('likes');
     }
 };

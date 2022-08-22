@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Models\Type;
+use App\Models\Like;
 use App\Models\Process;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest()->paginate(50);
+        $posts = Post::latest()->simplePaginate(50);
         return view('posts.index', ['posts' => $posts]);
     }
 
@@ -54,7 +55,8 @@ class PostController extends Controller
         $validated = $request->validate([
             'title' => ['required', 'min:5', 'max:255'],
             'description' => ['required', 'min:5', 'max:1000'],
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'tags' => 'required'
         ]);
 
         $post = new Post();
@@ -63,9 +65,11 @@ class PostController extends Controller
 //        $post->user_id = Auth::user()->id;
         $post->user_id = $request->user()->id;
        // $path = $request->file('image')->store('public/images'); 
+       if($request->hasFile('image')){
         $imageName = time().'.'.$request->image->extension();  
         $request->image->move(public_path('images'), $imageName);
         $post->image = $imageName;
+       }
         $post->save();
 
         $tags = $request->get('tags');
@@ -197,7 +201,8 @@ class PostController extends Controller
 
         $validated = $request->validate([
             'title' => ['required', 'min:5', 'max:255'],
-            'description' => ['required', 'min:5', 'max:1000']
+            'description' => ['required', 'min:5', 'max:1000'],
+            'tags' => 'required'
         ]);
         
         if($request->hasFile('image')){
@@ -265,4 +270,29 @@ class PostController extends Controller
         $posts = Post::FilterTitle($search)->get();
         return view('posts.search', ['posts' => $posts]);
     }
+
+    public function like($id){
+        $post = Post::find($id);
+        $post_id = $id;
+        $user_id = Auth::user()->id;
+        $like = new Like();
+        $likes = Like::LikePost($post_id, $user_id)->first();
+        if(!$likes) {
+            $like->post_id = $post_id;
+            $like->user_id = $user_id;
+            $like->like = 1;
+            $like->save();
+
+            $post->like_count = $post->like_count + 1;
+            $post->save();
+        }
+        else {
+            $ีืunlike = Like::UnlikePost($post_id);
+            $ีืunlike->delete();
+            $post->like_count = $post->like_count - 1;
+            $post->save();
+        }
+        return view('posts.show', ['post' => $post]);
+    }
+
 }

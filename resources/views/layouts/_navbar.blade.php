@@ -35,14 +35,14 @@
                     <li>
                         <a href="{{ route('posts.index') }}"
                            class="block py-2 pr-4 pl-3 rounded md:p-0 hover:underline @if(Route::currentRouteName() === 'posts.index') current-page @endif" >
-                            Posts
+                           เรื่องร้องเรียนทั้งหมด
                         </a>
                     </li>
                     @can('create', \App\Models\Post::class)
                         <li>
                             <a href="{{ route('posts.create') }}"
                                class="block py-2 pr-4 pl-3 rounded md:p-0 hover:underline @if(Route::currentRouteName() === 'posts.create') current-page @endif">
-                                แจ้งปัญหา
+                                แจ้งเรื่องร้องเรียน
                             </a>
                         </li>
                     @endcan

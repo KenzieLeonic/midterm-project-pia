@@ -26,7 +26,12 @@
 
 
             <div class="relative z-0 mb-6 w-full group">
-                <label class="label-gray" for="tags">ประเภทปัญหา</label>
+                <label class="label-gray" for="tags">ประเภทเรื่อง</label>
+                @error('tags')
+                    <p class="text-red-600">
+                        {{ $message }}
+                    </p>
+                @enderror
                 <input type="text" name="tags" id="tags"
                        class="input-gray bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                        placeholder="เช่น ความสะอาด, น้ำท่วม, จราจร, ..." autocomplete="off">
@@ -34,12 +39,19 @@
 
             <div class="relative z-0 mb-6 w-full group">
                 <label class="label-gray" for="types">หน่วยงาน</label>
-                <select name="types" id="types" class="input-gray bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <select name="types" id="types" 
+                    class="input-gray bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option value="อื่นๆ"selected>โปรดเลือกหน่วยงานที่เกี่ยวข้อง</option>
                     <option value="คณะวิทยาศาสตร์">คณะวิทยาศาสตร์</option>
-                    <option value="สบศ.">สบศ.</option>
+                    <option value="คณะมนุษยศาสตร์">คณะมนุษยศาสตร์</option>
+                    <option value="คณะวิศวกรรมศาสตร์">คณะวิศวกรรมศาสตร์</option>
+                    <option value="คณะบริหารธุรกิจ">คณะบริหารธุรกิจ</option>
+                    <option value="คณะสังคมศาสตร์">คณะสังคมศาสตร์</option>
+                    <option value="สำนักหอสมุด">สำนักหอสมุด</option>
+                    <option value="สำนักบริหารการศึกษา">สำนักบริหารการศึกษา</option>
                     <option value="กองกิจการนิสิต">กองกิจการนิสิต</option>
                     <option value="องค์การนิสิต">องค์การนิสิต</option>
-                    <option value="โปรดเลือกหน่วยงานที่เกี่ยวข้อง"selected>โปรดเลือกหน่วยงานที่เกี่ยวข้อง</option>
+                    <option value="อื่นๆ">อื่นๆ</option>
                 </select>
             </div>
 
