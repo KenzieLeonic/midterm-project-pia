@@ -62,8 +62,8 @@ class PostController extends Controller
         $post->description = $request->input('description');
 //        $post->user_id = Auth::user()->id;
         $post->user_id = $request->user()->id;
-       // $path = $request->file('image')->store('public/images'); 
-        $imageName = time().'.'.$request->image->extension();  
+       // $path = $request->file('image')->store('public/images');
+        $imageName = time().'.'.$request->image->extension();
         $request->image->move(public_path('images'), $imageName);
         $post->image = $imageName;
         $post->save();
@@ -77,7 +77,7 @@ class PostController extends Controller
         $post->types()->sync($type_ids);
 
         $post->processes()->sync(1);
-        
+
         return redirect()->route('posts.show', [ 'post' => $post->id ]);
         //                     --------------------------^
         //                    |
@@ -151,13 +151,14 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)       // dependency injection
+    public function show(Post $post, Request $request)       // dependency injection
     {
         if (is_int($post->view_count)) {
             $post->view_count = $post->view_count + 1;
             $post->save();
         }
-        return view('posts.show', ['post' => $post]);
+        $user = $request->user();
+        return view('posts.show', ['post' => $post, 'user' => $user]);
     }
 
     /**
@@ -199,14 +200,14 @@ class PostController extends Controller
             'title' => ['required', 'min:5', 'max:255'],
             'description' => ['required', 'min:5', 'max:1000']
         ]);
-        
+
         if($request->hasFile('image')){
             $request->validate([
               'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             ]);
             // $path = $request->file('image')->store('public/images');
             // $post->image = $path;
-            $imageName = time().'.'.$request->image->extension();  
+            $imageName = time().'.'.$request->image->extension();
             $request->image->move(public_path('images'), $imageName);
             $post->image = $imageName;
         }
@@ -228,7 +229,7 @@ class PostController extends Controller
             $process_ids = $this->syncProcesses($processes);
             $post->processes()->sync($process_ids);
         }
-        
+
 
         return redirect()->route('posts.show', ['post' => $post->id]);
     }
@@ -254,6 +255,11 @@ class PostController extends Controller
 
     public function storeComment(Request $request, Post $post)
     {
+        $validated = $request->validate(
+            [
+                'message'=>['required','min:1','max:255']
+                ]
+            );
         $comment = new Comment();
         $comment->message = $request->get('message');
         $post->comments()->save($comment);

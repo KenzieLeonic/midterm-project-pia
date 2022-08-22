@@ -1,20 +1,20 @@
 @extends('layouts.main')
 @section('content')
-    <div class="static">
-    <div class="chartbox flex w-1/3" >
-        <canvas id="myChart"></canvas>
-        <canvas id="lineChart"></canvas>
+    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" id="downloadPdf">Download Report Page as PDF <svg aria-hidden="true" class="ml-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></a>
+    <div id="reportPage" class="static">
+        <div class="chartbox flex w-1/3">
+            <canvas id="myChart"></canvas>
+            <canvas id="lineChart"></canvas>
+        </div>
+        <br/><br/><br/>
+        <div class="chartbox flex w-2/4">
+            <canvas id="barChart"></canvas>
+        </div>
+
     </div>
-
-    <div class="chartbox flex w-2/3">
-        <canvas id="barChart"></canvas>
-    </div>
-
-    </div>
-
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.debug.js"></script>
     <script type="text/javascript">
         //Data From Php to JAVASCRIPT
         var type_labels = {!! json_encode($types_labels) !!};
@@ -155,13 +155,55 @@
 
         //config lineChart
         const lineChart = new Chart(
-            document.getElementById('lineChart'),config2
+            document.getElementById('lineChart'), config2
         );
 
         //config pieChart
         const pieChart = new Chart(
             document.getElementById('barChart'), config3
-        )
+        );
 
+        $('#downloadPdf').click(function(event) {
+  // get size of report page
+  var reportPageHeight = $('#reportPage').innerHeight();
+  var reportPageWidth = $('#reportPage').innerWidth();
+
+  // create a new canvas object that we will populate with all other canvas objects
+  var pdfCanvas = $('<canvas />').attr({
+    id: "canvaspdf",
+    width: reportPageWidth,
+    height: reportPageHeight
+  });
+
+  // keep track canvas position
+  var pdfctx = $(pdfCanvas)[0].getContext('2d');
+  var pdfctxX = 5;
+  var pdfctxY = 2;
+  var buffer = 200;
+
+  // for each chart.js chart
+  $("canvas").each(function(index) {
+    // get the chart height/width
+    var canvasHeight = $(this).innerHeight();
+    var canvasWidth = $(this).innerWidth();
+
+    // draw the chart into the new canvas
+    pdfctx.drawImage($(this)[0], pdfctxX, pdfctxY, canvasWidth, canvasHeight);
+    pdfctxX += canvasWidth + buffer;
+
+    // our report page is in a grid pattern so replicate that in the new canvas
+    if (index % 2 === 1) {
+      pdfctxX = 0;
+      pdfctxY += canvasHeight + buffer;
+    }
+  });
+
+  // create new pdf and add our new canvas as an image
+  var pdf = new jsPDF('l', 'pt', [reportPageWidth, reportPageHeight]);
+  pdf.addImage($(pdfCanvas)[0], 'PNG', 0, 0);
+
+  // download the pdf
+  pdf.save('chart.pdf');
+});
     </script>
 @endsection

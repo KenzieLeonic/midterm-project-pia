@@ -17,6 +17,7 @@ class CommentFactory extends Factory
     public function definition()
     {
         return [
+
             'message' => fake()->realTextBetween(100, 250),
             'created_at' => now()->subSeconds(fake()->numberBetween(100, 10000))
         ];
