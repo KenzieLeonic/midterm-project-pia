@@ -262,6 +262,7 @@ class PostController extends Controller
             );
         $comment = new Comment();
         $comment->message = $request->get('message');
+        $comment->user_id = $request->user()->id;
         $post->comments()->save($comment);
         return redirect()->route('posts.show', ['post' => $post->id]);
     }
@@ -270,5 +271,20 @@ class PostController extends Controller
         $search = $request->input('search');
         $posts = Post::FilterTitle($search)->get();
         return view('posts.search', ['posts' => $posts]);
+    }
+
+    public function like(Post $post){
+        if (is_int($post->Like_count)) {
+            $post->Like_count = $post->Like_count + 1;
+            $post->save();
+        }
+        return view('posts.like', ['post' => $post]);
+    }
+
+    public function deleteComment(Comment $comment){
+        $comment->delete();
+        //$user = $request->user();
+        //return view('posts.show', ['post' => $post, 'user' => $user]);
+        return redirect()->back();
     }
 }

@@ -119,14 +119,108 @@
 
             <div class="flex flex-wrap space-y-2">
             @foreach($post->comments->sortByDesc('created_at') as $comment)
-                <div class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 ">
-                    <p class="bg-orange-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
-                        {{ $comment->created_at->diffForHumans() }}
-                    </p>
-                    <div class="text-xl pl-4">
-                        {{ $comment->message }}
-                    </div>
-                </div>
+                @auth
+                    @if($user->isAdmin() or $user->isStudentAffair())
+                        @if($comment->user->isAdmin() or $comment->user->isStudentAffair())
+                        <div class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 ">
+                            <p class="bg-orange-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
+                                {{ $comment->created_at->diffForHumans() }}
+                            </p>
+                            
+                            <div class="text-blue-600 pl-4">
+                                {{ $comment->user->name }} 
+                            </div>
+
+                            <div class="text-xl text-blue-600 pl-4">
+                                {{ $comment->message }}
+                            </div>
+
+                            <div class="text-xl pl-4">
+                                <a class="app-button" href="{{ route('posts.deleteComment', ['comment' => $comment->id]) }}">
+                                    Delete
+                                </a>
+                            </div>
+
+                        </div>
+                        @else
+                        <div class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 ">
+                            <p class="bg-orange-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
+                                {{ $comment->created_at->diffForHumans() }}
+                            </p>
+                            
+                            <div class=" pl-4">
+                                {{ $comment->user->name }} 
+                            </div>
+
+                            <div class="text-xl pl-4">
+                                {{ $comment->message }}
+                            </div>
+
+                            <div class="text-xl pl-4">
+                                <a class="app-button" href="">
+                                    Delete
+                                </a>
+                            </div>
+                        </div>
+                        @endif
+                    @else
+                        @if($comment->user->isAdmin() or $comment->user->isStudentAffair())
+                        <div class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 ">
+                            <p class="bg-orange-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
+                                {{ $comment->created_at->diffForHumans() }}
+                            </p>
+                            
+                            <div class="text-blue-600 pl-4">
+                                {{ $comment->user->name }} 
+                            </div>
+
+                            <div class="text-xl text-blue-600 pl-4">
+                                {{ $comment->message }}
+                            </div>
+
+                        </div>
+                        @else
+                        <div class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 ">
+                            <p class="bg-orange-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
+                                {{ $comment->created_at->diffForHumans() }}
+                            </p>         
+
+                            <div class="text-xl pl-4">
+                                {{ $comment->message }}
+                            </div>
+                        </div>
+                        @endif
+                    @endif
+                @else
+                    @if($comment->user->isAdmin() or $comment->user->isStudentAffair())
+                        <div class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 ">
+                            <p class="bg-orange-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
+                                {{ $comment->created_at->diffForHumans() }}
+                            </p>
+                            
+                            <div class="text-blue-600 pl-4">
+                                {{ $comment->user->name }} 
+                            </div>
+
+                            <div class="text-xl text-blue-600 pl-4">
+                                {{ $comment->message }}
+                            </div>
+
+                        </div>
+                        @else
+                        <div class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 ">
+                            <p class="bg-orange-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
+                                {{ $comment->created_at->diffForHumans() }}
+                            </p>         
+
+                            <div class="text-xl pl-4">
+                                {{ $comment->message }}
+                            </div>
+                        </div>
+                    @endif
+                @endif
+
+                
             @endforeach
             </div>
         @else
