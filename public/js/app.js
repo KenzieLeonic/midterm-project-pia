@@ -5137,10 +5137,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var flowbite__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! flowbite */ "./node_modules/flowbite/dist/flowbite.js");
 /* harmony import */ var flowbite__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(flowbite__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var alpinejs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! alpinejs */ "./node_modules/alpinejs/dist/module.esm.js");
+Object(function webpackMissingModule() { var e = new Error("Cannot find module 'chart.js/auto'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+
 
 
 
 window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_2__["default"];
+window.Chart = Object(function webpackMissingModule() { var e = new Error("Cannot find module 'chart.js/auto'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
 alpinejs__WEBPACK_IMPORTED_MODULE_2__["default"].start();
 
 /***/ }),
