@@ -1,13 +1,12 @@
-{{-- resources/views/tags/show.blade.php --}}
 @extends('layouts.main')
 
 @section('content')
     <section class="mx-8">
         <h1 class="font-mono text-3xl mx-4 mt-6">
-            ประเภท: {{ $tag->name }}
+            หน่วยงาน: {{ $type->name }}
         </h1>
         <p class="mx-4 mt-2">
-            {{ $tag->posts->count() }} posts
+            {{ $type->posts->count() }} posts
         </p>
         <div class="mt-4 overflow-x-auto relative shadow-md sm:rounded-lg">
         <table class="w-full text-left text-gray-600 dark:text-gray-400">
@@ -34,7 +33,7 @@
             </thead>
             
             <tbody class="m-2">
-                @foreach($tag->posts as $post)
+                @foreach($type->posts as $post)
                 <tr class="border-t">
                     <td>
                         <a href="{{ route('posts.show', ['post' => $post->id]) }}">
@@ -45,7 +44,7 @@
                         @endif
                         </a>
                     </td>
-                   <td class="py-3 px-6">
+                    <td class="py-3 px-6">
                         <a href="{{ route('posts.show', ['post' => $post->id]) }}" class="hover:underline hover:text-gray-700 ">
                         {{ $post->title }}
                         </a>
@@ -124,7 +123,5 @@
         </table>
         <div>
     </section>
-
-
 
 @endsection

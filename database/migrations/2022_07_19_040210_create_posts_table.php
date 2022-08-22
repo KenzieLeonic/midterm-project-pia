@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('description');
             $table->integer('view_count')->default(0);
             $table->integer('like_count')->default(0);
+            $table->string('image')->nullable()->default(null);
             $table->timestamps();
         });
     }

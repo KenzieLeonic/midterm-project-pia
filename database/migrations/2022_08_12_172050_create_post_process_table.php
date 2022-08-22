@@ -13,13 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('post_process', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Post::class); // foreign key `post_id`
-            $table->foreignIdFor(\App\Models\User::class);
-            $table->text('message');
+            $table->foreignIdFor(\App\Models\Post::class);   // `post_id`
+            $table->foreignIdFor(\App\Models\Process::class);    // `process_id`
             $table->timestamps();
-            $table->softDeletes();    // `deleted_at`
         });
     }
 
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('post_process');
     }
 };

@@ -1,10 +1,9 @@
-{{-- resources/views/posts/index.blade.php --}}
 @extends('layouts.main')
 
 @section('content')
     <section class="mx-8">
         <h1 class="font-mono text-2xl my-4">
-            เรื่องร้องเรียนทั้งหมด
+            ผลการค้นหา
         </h1>
         <div class="mt-4 overflow-x-auto relative shadow-md sm:rounded-lg">
         <table class="w-full text-left text-gray-600 dark:text-gray-400">
@@ -242,7 +241,6 @@
                 @endcan
              </tbody>
         </table>
-        <div class="m-6"> {{ $posts->links() }} </div>
         </div>
     </section>
 

@@ -1,7 +1,7 @@
-<nav class="bg-white border-gray-200 px-2 sm:px-4 py-2.5 rounded">
+<nav class="font-mono bg-[#006C67] border-gray-200 px-2 sm:px-4 py-2.5">
     <div class="container flex flex-wrap justify-between items-center mx-auto">
         <a href="{{ url('/') }}" class="flex items-center">
-            <span class="self-center text-xl font-semibold whitespace-nowrap">CS442</span>
+            <span class="self-center text-xl font-semibold whitespace-nowrap font-mono text-white">ระบบรับร้องเรียนในมหาวิทยาลัย</span>
         </a>
         <button data-collapse-toggle="navbar-default" type="button"
                 class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 "
@@ -13,39 +13,47 @@
             </svg>
         </button>
         <div class="hidden w-full md:block md:w-auto" id="navbar-default">
-            <ul class="flex flex-col p-4 mt-4 bg-gray-50 rounded-lg border border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 md:bg-white ">
+            <ul class="flex items-center flex-col p-4 mt-4 md:flex-row md:space-x-8 md:mt-0 md:font-medium md:border-0 text-white">
+            <div>
+                <form action="{{ route('posts.search')}}" method="get">      
+                    <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-300">Search</label>
+                    <div class="relative">
+                        <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                            <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </div>
+                        <input name="search" type="search" id="default-search" class="block p-4 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="ค้นหาหัวข้อเรื่อง" required>
+                        <button type="submit" class="text-white absolute right-2.5 bottom-2.5  bg-[#B3BA1E] hover:bg-[#aeb347] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
                 @auth
                     <li>
-                        {{ Auth::user()->email }}
+                        {{ Auth::user()->name }}
                     </li>
                     <li>
                         <a href="{{ route('posts.index') }}"
                            class="block py-2 pr-4 pl-3 rounded md:p-0 hover:underline @if(Route::currentRouteName() === 'posts.index') current-page @endif" >
-                            Posts
+                           เรื่องร้องเรียนทั้งหมด
                         </a>
                     </li>
                     @can('create', \App\Models\Post::class)
                         <li>
                             <a href="{{ route('posts.create') }}"
                                class="block py-2 pr-4 pl-3 rounded md:p-0 hover:underline @if(Route::currentRouteName() === 'posts.create') current-page @endif">
-                                New Post
+                                แจ้งเรื่องร้องเรียน
                             </a>
                         </li>
                     @endcan
                     <li>
-                        <a href="{{ route('tags.index') }}"
-                           class="block py-2 pr-4 pl-3 rounded md:p-0 hover:underline @if(Route::currentRouteName() === 'tags.index') current-page @endif" >
-                            Tags
-                        </a>
-                    </li>
-                    <li>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
-                            <x-dropdown-link :href="route('logout')"
+                            <x-dropdown-link class="text-white block py-2 pr-4 pl-3 rounded md:p-0.5 hover:bg-[#B3BA1E]" :href="route('logout')"
                                              onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                {{ __('ออกจากระบบ') }}
                             </x-dropdown-link>
                         </form>
                     </li>
@@ -53,15 +61,15 @@
                     <li>
                         <a href="{{ route('login') }}"
                            class="block py-2 pr-4 pl-3 rounded md:p-0 hover:underline @if(Route::currentRouteName() === 'login') current-page @endif" >
-                            Login
+                            เข้าสู่ระบบ
                         </a>
                     </li>
                     <li>
                         <a href="{{ route('register') }}"
                            class="block py-2 pr-4 pl-3 rounded md:p-0 hover:underline @if(Route::currentRouteName() === 'register') current-page @endif" >
-                            Register
+                            ลงทะเบียน
                         </a>
-                    </li>
+                    </li> 
                 @endauth
             </ul>
         </div>

@@ -47,14 +47,30 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
+    public function likes()
+    {
+        return $this->belongToMany(Like::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+
+    }
+
     public function isAdmin()
     {
         return $this->role === 'ADMIN';
     }
 
-    public function isEditor()
+    public function isStudentAffair()
     {
-        return $this->role === 'EDITOR';
+        return $this->role === 'STUDENTAFFAIR';
+    }
+
+    public function isStaff()
+    {
+        return $this->role === 'STAFF';
     }
 
     public function isUser()

@@ -10,6 +10,13 @@ class Post extends Model
 {
     use HasFactory; // trait
 
+    protected $fillable = ['title', 'description','image'];
+
+    public function types()
+    {
+        return $this->belongsToMany(Type::class);
+    }
+
     /*
      * + ฟังก์ชัน tags() คืนค่า ความสัมพันธ์ belongsToMany
      * + attribute tags คืนค่า collection ของ Tag ที่ผูกกับ Post นี้
@@ -17,6 +24,11 @@ class Post extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function processes()
+    {
+        return $this->belongsToMany(Process::class);
     }
 
     public function user()
@@ -32,6 +44,11 @@ class Post extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
     }
 
     public function scopeAdvertise($query)
@@ -60,18 +77,4 @@ class Post extends Model
                 : $value
             );
     }
-
-//    public function viewCount() : Attribute
-//    {
-//        return Attribute::make(
-//            get: fn ($value) => $this->numberToK($value)
-//        );
-//    }
-//
-//    public function likeCount() : Attribute
-//    {
-//        return Attribute::make(
-//            get: fn ($value) => $this->numberToK($value)
-//        );
-//    }
 }
