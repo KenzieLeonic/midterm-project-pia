@@ -151,13 +151,14 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)       // dependency injection
+    public function show(Post $post, Request $request)       // dependency injection
     {
         if (is_int($post->view_count)) {
             $post->view_count = $post->view_count + 1;
             $post->save();
         }
-        return view('posts.show', ['post' => $post]);
+        $user = $request->user();
+        return view('posts.show', ['post' => $post, 'user' => $user]);
     }
 
     /**
@@ -256,6 +257,7 @@ class PostController extends Controller
     {
         $comment = new Comment();
         $comment->message = $request->get('message');
+        $comment->user_id = $request->user()->id;
         $post->comments()->save($comment);
         return redirect()->route('posts.show', ['post' => $post->id]);
     }
@@ -264,5 +266,20 @@ class PostController extends Controller
         $search = $request->input('search');
         $posts = Post::FilterTitle($search)->get();
         return view('posts.search', ['posts' => $posts]);
+    }
+
+    public function like(Post $post){
+        if (is_int($post->Like_count)) {
+            $post->Like_count = $post->Like_count + 1;
+            $post->save();
+        }
+        return view('posts.like', ['post' => $post]);
+    }
+
+    public function deleteComment(Comment $comment){
+        $comment->delete();
+        //$user = $request->user();
+        //return view('posts.show', ['post' => $post, 'user' => $user]);
+        return redirect()->back();
     }
 }

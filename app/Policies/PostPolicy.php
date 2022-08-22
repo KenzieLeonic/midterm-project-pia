@@ -73,8 +73,17 @@ class PostPolicy
      */
     public function update(User $user, Post $post)
     {
-        return $user->isAdmin() or $user->isStaff() or $user->isStudentAffair() or
+        $process_id = $post->processes->pluck('id')->all();
+        $process_id = implode(", ", $process_id);
+
+        if($process_id == 1 or $process_id == 2){
+            return $user->isAdmin() or $user->isStudentAffair() or
             ($user->isUser() and $user->id === $post->user_id);
+        }
+        else{
+            return $user->isAdmin() or $user->isStaff() or $user->isStudentAffair() or
+            ($user->isUser() and $user->id === $post->user_id);
+        }
     }
 
     /**
