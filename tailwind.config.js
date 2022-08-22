@@ -20,6 +20,18 @@ module.exports = {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
         },
+        variants: {},
+        plugins: [
+            function ({addUtilities}) {
+                const extendUnderline = {
+                    '.underline': {
+                        'textDecoration': 'underline',
+                        'text-decoration-color': '#B3BA1E',
+                    },
+                }
+                addUtilities(extendUnderline)
+            },
+        ]
     },
 
     plugins: [

@@ -1,7 +1,7 @@
 <nav class="font-mono bg-[#006C67] border-gray-200 px-2 sm:px-4 py-2.5">
     <div class="container flex flex-wrap justify-between items-center mx-auto">
         <a href="{{ url('/') }}" class="flex items-center">
-            <span class="self-center text-xl font-semibold whitespace-nowrap font-mono text-white">ระบบรับร้องเรียนในมหาวิทยาลัย</span>
+            <span class="self-center text-xl font-semibold whitespace-nowrap font-mono text-white ml-1"><img src="{{ URL::to('/assets/img/logo1.png')}}" alt="" style="width: 100px"></span>
         </a>
         <button data-collapse-toggle="navbar-default" type="button"
                 class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 "
@@ -15,7 +15,7 @@
         <div class="hidden w-full md:block md:w-auto" id="navbar-default">
             <ul class="flex items-center flex-col p-4 mt-4 md:flex-row md:space-x-8 md:mt-0 md:font-medium md:border-0 text-white">
             <div>
-                <form action="{{ route('posts.search')}}" method="get">      
+                <form action="{{ route('posts.search')}}" method="get">
                     <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-300">Search</label>
                     <div class="relative">
                         <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
@@ -46,10 +46,17 @@
                             </a>
                         </li>
                     @endcan
+                    @canany(['viewForAdmin','viewForManager'], \App\Models\Post::class)
+                    <li>
+                        <a href="{{route('charts.index')}}"
+                            class="block py-2 pr-4 pl-3 rounded md:p-0 hover:underline @if (Route::currentRouteName() === 'chart.index') current-page @endif">
+                            Dashboard
+                        </a>
+                    </li>
+                    @endcanany
                     <li>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-
                             <x-dropdown-link class="text-white block py-2 pr-4 pl-3 rounded md:p-0.5 hover:bg-[#B3BA1E]" :href="route('logout')"
                                              onclick="event.preventDefault();
                                                 this.closest('form').submit();">
@@ -69,7 +76,7 @@
                            class="block py-2 pr-4 pl-3 rounded md:p-0 hover:underline @if(Route::currentRouteName() === 'register') current-page @endif" >
                             ลงทะเบียน
                         </a>
-                    </li> 
+                    </li>
                 @endauth
             </ul>
         </div>

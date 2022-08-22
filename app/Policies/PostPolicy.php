@@ -31,11 +31,16 @@ class PostPolicy
         return $user->isStaff();
     }
 
+    public function viewForManager(User $user)
+    {
+        return $user->isManager();
+    }
+
     public function viewForStudentAffair(User $user)
     {
         return $user->isStudentAffair();
     }
-    
+
     public function viewForUser(User $user)
     {
         return $user->isUser();

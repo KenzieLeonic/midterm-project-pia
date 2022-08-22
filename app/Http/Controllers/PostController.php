@@ -65,7 +65,9 @@ class PostController extends Controller
 //        $post->user_id = Auth::user()->id;
         $post->user_id = $request->user()->id;
        // $path = $request->file('image')->store('public/images');
+
        if($request->hasFile('image')){
+
         $imageName = time().'.'.$request->image->extension();
         $request->image->move(public_path('images'), $imageName);
         $post->image = $imageName;
@@ -260,6 +262,11 @@ class PostController extends Controller
 
     public function storeComment(Request $request, Post $post)
     {
+        $validated = $request->validate(
+            [
+                'message'=>['required','min:1','max:255']
+                ]
+            );
         $comment = new Comment();
         $comment->message = $request->get('message');
         $comment->user_id = $request->user()->id;
