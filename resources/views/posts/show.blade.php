@@ -6,25 +6,25 @@
         <h1 class="text-3xl mb-1">
             {{ $post->title }}
             @foreach($post->processes as $process)
-                @if($process->name == 'รอรับเรื่อง') 
+                @if($process->name == 'รอรับเรื่อง')
                     <a href="{{ route('processes.show', ['process' => $process->name]) }}">
                         <p class="border-2 border-blue-300 text-blue-400 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
                             {{ $process->name }}
                         </p>
                     </a>
-                @elseif($process->name == 'ดำเนินการ') 
+                @elseif($process->name == 'ดำเนินการ')
                     <a href="{{ route('processes.show', ['process' => $process->name]) }}">
                         <p class="border-2 border-yellow-300 text-yellow-400 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
                           {{ $process->name }}
                         </p>
                     </a>
-                @elseif($process->name == 'เสร็จสิ้น') 
+                @elseif($process->name == 'เสร็จสิ้น')
                     <a href="{{ route('processes.show', ['process' => $process->name]) }}">
                         <p class="border-2 border-[#B3BA1E] text-[#B3BA1E] text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
                             {{ $process->name }}
                         </p>
                     </a>
-                @elseif($process->name == 'ไม่อนุมัติ') 
+                @elseif($process->name == 'ไม่อนุมัติ')
                     <a href="{{ route('processes.show', ['process' => $process->name]) }}">
                         <p class="border-2 border-red-300 text-red-400 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
                             {{ $process->name }}
@@ -35,7 +35,7 @@
         </h1>
         @canany(['viewForStudentAffair', 'viewForAdmin'], $post)
         <p class="my-4">
-            Email: {{ $post->user->email }} | By {{ $post->user->name }} 
+            Email: {{ $post->user->email }} | By {{ $post->user->name }}
         </p>
         @endcanany
         <p class="my-4">
@@ -66,18 +66,18 @@
                     </p>
                 </a>
             @endforeach
-       
+
             @foreach($post->types as $type)
                 <a href="{{ route('types.show', ['type' => $type->name]) }}">
-                    <p class="m-2 bg-purple-100 text-center text-gray-800 text-xs font-medium inline-flex  px-3 pt-2 pb-1.5 rounded mr-2"> 
+                    <p class="m-2 bg-purple-100 text-center text-gray-800 text-xs font-medium inline-flex  px-3 pt-2 pb-1.5 rounded mr-2">
                         {{ $type->name }}
                     </p>
                 </a>
             @endforeach
         </div>
-        
+
         <div class="m-4">
-            @if($post->image)    
+            @if($post->image)
                 <img src="/images/{{ ($post->image) }}" class="p-1 rounded mx-auto" height="400" width="400"/>
             @else
                 <img src="/images/no-image.jpg" class="p-1 rounded mx-auto" height="400" width="400"/>
@@ -120,14 +120,108 @@
 
             <div class="flex flex-wrap space-y-2">
             @foreach($post->comments->sortByDesc('created_at') as $comment)
-                <div class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 ">
-                    <p class="bg-orange-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
-                        {{ $comment->created_at->diffForHumans() }}
-                    </p>
-                    <div class="text-xl pl-4">
-                        {{ $comment->message }}
-                    </div>
-                </div>
+                @auth
+                    @if($user->isAdmin() or $user->isStudentAffair())
+                        @if($comment->user->isAdmin() or $comment->user->isStudentAffair())
+                        <div class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 ">
+                            <p class="bg-orange-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
+                                {{ $comment->created_at->diffForHumans() }}
+                            </p>
+
+                            <div class="text-blue-600 pl-4">
+                                {{ $comment->user->name }}
+                            </div>
+
+                            <div class="text-xl text-blue-600 pl-4">
+                                {{ $comment->message }}
+                            </div>
+
+                            <div class="text-xl pl-4">
+                                <a class="app-button" href="{{ route('posts.deleteComment', ['comment' => $comment->id]) }}">
+                                    Delete
+                                </a>
+                            </div>
+
+                        </div>
+                        @else
+                        <div class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 ">
+                            <p class="bg-orange-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
+                                {{ $comment->created_at->diffForHumans() }}
+                            </p>
+
+                            <div class=" pl-4">
+                                {{ $comment->user->name }}
+                            </div>
+
+                            <div class="text-xl pl-4">
+                                {{ $comment->message }}
+                            </div>
+
+                            <div class="text-xl pl-4">
+                                <a class="app-button" href="">
+                                    Delete
+                                </a>
+                            </div>
+                        </div>
+                        @endif
+                    @else
+                        @if($comment->user->isAdmin() or $comment->user->isStudentAffair())
+                        <div class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 ">
+                            <p class="bg-orange-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
+                                {{ $comment->created_at->diffForHumans() }}
+                            </p>
+
+                            <div class="text-blue-600 pl-4">
+                                {{ $comment->user->name }}
+                            </div>
+
+                            <div class="text-xl text-blue-600 pl-4">
+                                {{ $comment->message }}
+                            </div>
+
+                        </div>
+                        @else
+                        <div class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 ">
+                            <p class="bg-orange-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
+                                {{ $comment->created_at->diffForHumans() }}
+                            </p>
+
+                            <div class="text-xl pl-4">
+                                {{ $comment->message }}
+                            </div>
+                        </div>
+                        @endif
+                    @endif
+                @else
+                    @if($comment->user->isAdmin() or $comment->user->isStudentAffair())
+                        <div class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 ">
+                            <p class="bg-orange-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
+                                {{ $comment->created_at->diffForHumans() }}
+                            </p>
+
+                            <div class="text-blue-600 pl-4">
+                                {{ $comment->user->name }}
+                            </div>
+
+                            <div class="text-xl text-blue-600 pl-4">
+                                {{ $comment->message }}
+                            </div>
+
+                        </div>
+                        @else
+                        <div class="block p-6 w-full bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 ">
+                            <p class="bg-orange-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2">
+                                {{ $comment->created_at->diffForHumans() }}
+                            </p>
+
+                            <div class="text-xl pl-4">
+                                {{ $comment->message }}
+                            </div>
+                        </div>
+                    @endif
+                @endif
+
+
             @endforeach
             </div>
         @else

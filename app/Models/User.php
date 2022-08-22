@@ -52,6 +52,12 @@ class User extends Authenticatable
         return $this->belongToMany(Like::class);
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+
+    }
+
     public function isAdmin()
     {
         return $this->role === 'ADMIN';

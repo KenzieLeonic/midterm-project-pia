@@ -64,9 +64,9 @@ class PostController extends Controller
         $post->description = $request->input('description');
 //        $post->user_id = Auth::user()->id;
         $post->user_id = $request->user()->id;
-       // $path = $request->file('image')->store('public/images'); 
+       // $path = $request->file('image')->store('public/images');
        if($request->hasFile('image')){
-        $imageName = time().'.'.$request->image->extension();  
+        $imageName = time().'.'.$request->image->extension();
         $request->image->move(public_path('images'), $imageName);
         $post->image = $imageName;
        }
@@ -81,7 +81,7 @@ class PostController extends Controller
         $post->types()->sync($type_ids);
 
         $post->processes()->sync(1);
-        
+
         return redirect()->route('posts.show', [ 'post' => $post->id ]);
         //                     --------------------------^
         //                    |
@@ -155,13 +155,14 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)       // dependency injection
+    public function show(Post $post, Request $request)       // dependency injection
     {
         if (is_int($post->view_count)) {
             $post->view_count = $post->view_count + 1;
             $post->save();
         }
-        return view('posts.show', ['post' => $post]);
+        $user = $request->user();
+        return view('posts.show', ['post' => $post, 'user' => $user]);
     }
 
     /**
@@ -204,14 +205,14 @@ class PostController extends Controller
             'description' => ['required', 'min:5', 'max:1000'],
             'tags' => 'required'
         ]);
-        
+
         if($request->hasFile('image')){
             $request->validate([
               'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             ]);
             // $path = $request->file('image')->store('public/images');
             // $post->image = $path;
-            $imageName = time().'.'.$request->image->extension();  
+            $imageName = time().'.'.$request->image->extension();
             $request->image->move(public_path('images'), $imageName);
             $post->image = $imageName;
         }
@@ -233,7 +234,7 @@ class PostController extends Controller
             $process_ids = $this->syncProcesses($processes);
             $post->processes()->sync($process_ids);
         }
-        
+
 
         return redirect()->route('posts.show', ['post' => $post->id]);
     }
@@ -261,6 +262,7 @@ class PostController extends Controller
     {
         $comment = new Comment();
         $comment->message = $request->get('message');
+        $comment->user_id = $request->user()->id;
         $post->comments()->save($comment);
         return redirect()->route('posts.show', ['post' => $post->id]);
     }
@@ -271,7 +273,8 @@ class PostController extends Controller
         return view('posts.search', ['posts' => $posts]);
     }
 
-    public function like($id){
+
+    public function like($id, Request $request){
         $post = Post::find($id);
         $post_id = $id;
         $user_id = Auth::user()->id;
@@ -287,12 +290,20 @@ class PostController extends Controller
             $post->save();
         }
         else {
-            $ีืunlike = Like::UnlikePost($post_id);
-            $ีืunlike->delete();
+            $unlike = Like::UnlikePost($post_id);
+            $unlike->delete();
             $post->like_count = $post->like_count - 1;
             $post->save();
         }
-        return view('posts.show', ['post' => $post]);
+        $user = $request->user();
+        return view('posts.show', ['post' => $post, 'user' => $user]);
     }
 
+
+    public function deleteComment(Comment $comment){
+        $comment->delete();
+        //$user = $request->user();
+        //return view('posts.show', ['post' => $post, 'user' => $user]);
+        return redirect()->back();
+    }
 }
