@@ -131,9 +131,15 @@
                                 {{ $comment->created_at->diffForHumans() }}
                             </p>
 
+                            @if($comment->user->isStudentAffair())
                             <div class="text-blue-600 pl-4">
-                                {{ $comment->user->name }}
+                                STUDENT AFFAIR
                             </div>
+                            @else
+                            <div class="text-blue-600 pl-4">
+                                {{ $comment->user->role }}
+                            </div>
+                            @endif
 
                             <div class="text-xl text-blue-600 pl-4">
                                 {{ $comment->message }}
@@ -174,9 +180,15 @@
                                 {{ $comment->created_at->diffForHumans() }}
                             </p>
 
+                            @if($comment->user->isStudentAffair())
                             <div class="text-blue-600 pl-4">
-                                {{ $comment->user->name }}
+                                STUDENT AFFAIR
                             </div>
+                            @else
+                            <div class="text-blue-600 pl-4">
+                                {{ $comment->user->role }}
+                            </div>
+                            @endif
 
                             <div class="text-xl text-blue-600 pl-4">
                                 {{ $comment->message }}
@@ -202,9 +214,15 @@
                                 {{ $comment->created_at->diffForHumans() }}
                             </p>
 
+                            @if($comment->user->isStudentAffair())
                             <div class="text-blue-600 pl-4">
-                                {{ $comment->user->name }}
+                                STUDENT AFFAIR
                             </div>
+                            @else
+                            <div class="text-blue-600 pl-4">
+                                {{ $comment->user->role }}
+                            </div>
+                            @endif
 
                             <div class="text-xl text-blue-600 pl-4">
                                 {{ $comment->message }}
