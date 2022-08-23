@@ -39,7 +39,7 @@
         </p>
         @endcanany
         <p class="my-4">
-            {{ date('d-m-Y', strtotime($post->created_at)) }}
+            วันเวลาที่แจ้ง: {{ date('d-m-Y H:i:s', strtotime($post->created_at)) }}
         </p>
         <div>
             <p class="bg-orange-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-2 rounded mr-2">
