@@ -30,6 +30,9 @@
                             สถานะงาน
                         </a>
                     </th>
+                    @canany(['viewForUser', 'viewForStudentAffair', 'viewForAdmin', 'viewForStaff'], \App\Models\Post::class)
+                        <th scope="col"></th>
+                    @endcanany
                 </tr>
             </thead>
             
@@ -118,6 +121,19 @@
                             @endif
                         @endforeach
                     </td>
+
+                    @canany(['viewForUser', 'viewForStaff', 'viewForStudentAffair', 'viewForAdmin'], \App\Models\Post::class)
+                    <td>
+                        @can('update', $post)
+                        <div>
+                            <a class="font-mono text-gray-600 text-sm p-2 m-3 ml-0.5 rounded bg-gray-200 hover:bg-gray-300" href="{{ route('posts.edit', ['post' => $post->id]) }}">
+                                แก้ไข
+                            </a>
+                        </div>
+                        @endcan
+                    </td>
+                    @endcanany
+                    
                 </tr>
                 @endforeach
             </tbody>

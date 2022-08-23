@@ -19,7 +19,7 @@ class ProcessController extends Controller
         return view('processes.index', ['processes' => $processes]);
     }
 
-    public function show($id,$user)
+    public function show($id)
     {
         $process = Process::where('name', $id)->firstOrFail();
         return view('processes.show', ['process' => $process]);
